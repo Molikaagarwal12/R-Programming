@@ -6,10 +6,20 @@ output: html_notebook
 This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
 
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+```{r}
+install.packages("DataExplorer")
+library("DataExplorer")
+```
 
 ```{r}
 library(nycflights13)
+
 data_list<-list(airlines,airports,flights,planes,weather)
+
+```
+
+
+```{r}
 plot_str(data_list)
 ```
 ```{r}
@@ -22,6 +32,31 @@ plot_intro(final_data)
 plot_missing(final_data)
 final_data<-drop_columns(final_data,"speed")
 plot_bar(final_data)
+```
+```{r}
+plot_histogram(final_data)
+final_data<-update_columns(final_data,"flight",as.factor)
+final_data<-drop_columns(final_data,c("tz_orgin"))
+```
+
+
+```{r}
+#quamtial quantial plot is a way to visualise the deviation from specific #pobablity distribution
+qq_data<-final_data[,c("arr_delay","air_time","distance","seats")]
+plot_qq(qq_data,sampled_rows=100L)
+```
+```{r}
+plot_correlation(na.omit(final_data),maxcat = 5L,type = "d")
+```
+```{r}
+arr_delay_df <- final_data[ ,c("arr_delay","month","day","hour","minute","dep_delay","distance","seats")]
+plot_boxplot(arr_delay_df, by="arr_delay")
+```
+```{r}
+boxplot(final_data["air_time"])
+```
+```{r}
+create_report(final_data)
 ```
 
 
